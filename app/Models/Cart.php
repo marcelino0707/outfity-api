@@ -10,8 +10,8 @@ class Cart extends Model
     use SoftDeletes;
     protected $fillable = [
         'user_id',
-        'invoice_number',
-        'total_amount',
+        'product_id',
+        'quantity',
     ];
 
     public function user()
