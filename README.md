@@ -18,5 +18,6 @@
 5. `php artisan serve`
 
 ## Postman Collection
-1. import this postman collection 
-`https://api.postman.com/collections/23319272-98f18018-c383-4f6d-90fd-8ab02f379b97?access_key=PMAT-01H3DSRJW0DP6QPKAQFZ5VTCMD`
+1. import postman collection from this link
+https://docs.google.com/document/d/1D6tGLqxejL1lK0CAeKWxF6kukRWQnjXdKD1oWVQwoCU/edit?usp=sharing
+
