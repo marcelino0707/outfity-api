@@ -1,5 +1,5 @@
 
-## usage
+## Setup
 1. `cp .env.example .env`
 2. adjust database environment
 	```
@@ -10,7 +10,7 @@
 	DB_PASSWORD=~~yourpassword~~
 	```
 
-### local environment
+## run in local environment 
 1. `composer install`
 2. `php artisan key:generate`
 3. `php artisan migrate:fresh --seed`
