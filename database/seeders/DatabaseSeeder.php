@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Cart;
+use App\Models\CartDetail;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\User;
@@ -55,12 +56,17 @@ class DatabaseSeeder extends Seeder
 
         Cart::create([
             'user_id' => 2,
-            'product_id' => 1,
-            'quantity' => 2,
+            'title_cart' => 'Belanjaan Diskonan',
         ]);
 
-        Cart::create([
-            'user_id' => 2,
+        CartDetail::create([
+            'cart_id' => 1,
+            'product_id' => 1,
+            'quantity' => 3,
+        ]);
+
+        CartDetail::create([
+            'cart_id' => 1,
             'product_id' => 2,
             'quantity' => 4,
         ]);
@@ -69,12 +75,6 @@ class DatabaseSeeder extends Seeder
             'cart_id' => 1,
             'invoice_number' => 'INV001',
             'total_amount' => 150000.00,
-        ]);
-
-        Transaction::create([
-            'cart_id' => 2,
-            'invoice_number' => 'INV002',
-            'total_amount' => 325000.00,
         ]);
     }
 }

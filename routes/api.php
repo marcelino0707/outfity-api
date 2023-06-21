@@ -21,16 +21,23 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-// Product
-Route::get('product', [ProductController::class, 'index']);
-Route::post('product', [ProductController::class, 'store']);
-Route::get('product/{id}', [ProductController::class, 'show']);
-Route::put('product/{id}', [ProductController::class, 'update']);
-Route::delete('product/{id}', [ProductController::class, 'destroy']);
 
-// Cart
 Route::group(['middleware' => 'auth.jwt'], function () {
-    Route::post('cart', [CartController::class, 'addToCart']);
+    // Product
+    Route::get('product', [ProductController::class, 'index']);
+    Route::post('product', [ProductController::class, 'store']);
+    Route::get('product/{id}', [ProductController::class, 'show']);
+    Route::put('product/{id}', [ProductController::class, 'update']);
+    Route::delete('product/{id}', [ProductController::class, 'destroy']);
+    
+    // Cart
+    Route::get('cart', [CartController::class, 'getCart']);
+    Route::post('cart', [CartController::class, 'createCart']);
+    Route::get('cart/{id}', [CartController::class, 'showCartItem']);
+    Route::post('add-to-cart', [CartController::class, 'addToCart']);
+
+    // Transaction
+    Route::post('transaction', [CartController::class, 'checkout']);
 });
 
 
