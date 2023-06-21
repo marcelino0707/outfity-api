@@ -13,6 +13,7 @@ class AuthController extends Controller
 {
     // register
     public function register(Request $request) {
+        echo($request->role);
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'username' => 'required|unique:users,username',

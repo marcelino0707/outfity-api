@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\Auth;
 class CartController extends Controller
 {
     public function getCart()
-    {
+    {   
         $user = Auth::user();
-        $carts = Cart::where('user_id', $user->id)
+        if($user->role != 'admin') {
+            $carts = Cart::where('user_id', $user->id)
             ->get()
             ->map(function($carts) {
                 return [
@@ -25,8 +26,11 @@ class CartController extends Controller
                 ];   
             });
 
-        if (!$carts) {
-            return response()->json(['error' => 'Carts is empty'], 404);
+            if (!$carts) {
+                return response()->json(['error' => 'Carts is empty'], 404);
+            }
+        } else {
+            $carts = Cart::all();
         }
             
         return response()->json([
@@ -60,15 +64,17 @@ class CartController extends Controller
     }
     public function showCartItem($id) {
         $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)
+
+        if($user->role != 'admin') {
+            $cart = Cart::where('user_id', $user->id)
             ->where('id', $id)
             ->first();
 
-        if (!$cart) {
-            return response()->json(['error' => 'Cart not found'], 404);
-        }
+            if (!$cart) {
+                return response()->json(['error' => 'Cart not found'], 404);
+            }
 
-        $items = CartDetail::where('cart_id', $cart->id)
+            $items = CartDetail::where('cart_id', $cart->id)
             ->with('product')
             ->get()
             ->map(function ($items) {
@@ -80,7 +86,21 @@ class CartController extends Controller
                     'quantity' => $items->quantity,
                 ];
             });
-            
+        } else {
+            $items = CartDetail::where('cart_id', $id)
+            ->with('product')
+            ->get()
+            ->map(function ($items) {
+                return [
+                    'title' => $items->product->title,
+                    'price' => $items->product->price,
+                    'category' => $items->product->category,
+                    'description' => $items->product->description,
+                    'quantity' => $items->quantity,
+                ];
+            });
+        }
+
         return response()->json([
             'message' => 'Get cart detail success!',
             'data' => $items
@@ -132,6 +152,25 @@ class CartController extends Controller
         return response()->json(['message' => 'Add item to cart successfully...'], 201);
     }
 
+    public function getTransaction() {
+        $user = Auth::user();
+        
+        if($user->role != 'admin') {
+            $transaction = Transaction::where('user_id', $user->id)->first();
+    
+            if (!$transaction) {
+                return response()->json(['error' => 'Transaction is empty'], 404);
+            }
+        } else {
+            $transaction = Transaction::all();
+        }
+
+        return response()->json([
+            'message' => 'Get transactions success!',
+            'data' => $transaction
+        ], 200); 
+    }
+
     public function checkout(Request $request) {
         $validator = Validator::make($request->all(), [
             'cart_id' => 'required|exists:carts,id',
@@ -166,12 +205,13 @@ class CartController extends Controller
         try {
             Transaction::create([
                 'cart_id' =>  $cart->id,
+                'user_id' => $user->id,
                 'invoice_number' => 'INV-'. uniqid($cart->id),
                 'total_amount' => $total_amount,
             ]);
 
             $cart->delete();
-            
+
         } catch (QueryException $e) {
             return response()->json(['error' => 'Failed to create transaction :' . $e->errorInfo], 500);
         }

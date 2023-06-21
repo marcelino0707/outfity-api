@@ -9,13 +9,14 @@ class Transaction extends Model
 {
     use SoftDeletes;
     protected $fillable = [
+        'user_id',
         'cart_id',
         'invoice_number',
         'total_amount',
     ];
 
-    public function cart()
-    {
-        return $this->belongsTo(Cart::class);
-    }
+    // public function cart()
+    // {
+    //     return $this->belongsTo(Cart::class);
+    // }
 }

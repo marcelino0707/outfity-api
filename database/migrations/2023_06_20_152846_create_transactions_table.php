@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('cart_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('invoice_number')->unique();
             $table->decimal('total_amount', 10, 2);
             $table->timestamps();
             $table->softDeletes();
 
+            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('cart_id')->references('id')->on('carts');
         });
     }

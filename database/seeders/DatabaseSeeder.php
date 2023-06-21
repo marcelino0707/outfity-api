@@ -73,6 +73,7 @@ class DatabaseSeeder extends Seeder
 
         Transaction::create([
             'cart_id' => 1,
+            'user_id' => 1,
             'invoice_number' => 'INV001',
             'total_amount' => 150000.00,
         ]);
